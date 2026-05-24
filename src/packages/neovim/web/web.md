@@ -23,6 +23,7 @@ The `web` edition extends `base` with TypeScript/JavaScript tooling: a dedicated
 | typescript | TypeScript compiler (required by vtsls) |
 | eslint_d | Fast eslint daemon for linting and formatting |
 | prettier | General formatter (also in base) |
+| vscode-js-debug | Node.js / browser debug adapter |
 
 ## LSP
 
@@ -49,5 +50,4 @@ The `web` edition extends `base` with TypeScript/JavaScript tooling: a dedicated
 
 - **Tailwind CSS LSP** — no `tailwindcss-language-server`; useful for projects using Tailwind utility classes
 - **TypeScript error translation** — `ts-error-translator` exists as a custom plugin in `src/packages/vimPlugins/` but is not wired up; it makes cryptic TS errors human-readable
-- **Debugging** — no DAP setup for Node.js or browser debugging
 - **Test runner integration** — no vitest/jest integration for running tests inline

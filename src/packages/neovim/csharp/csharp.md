@@ -4,7 +4,7 @@ The `csharp` edition extends `base` with a C# development environment: OmniSharp
 
 ## Additional Plugins
 
-None currently active. `nvim-dap` is commented out in `_plugins.nix` pending a debugging setup.
+None. `nvim-dap` is provided by base.
 
 ## Additional Treesitter Parsers
 
@@ -33,8 +33,10 @@ OmniSharp is started on `FileType cs` via an autocmd in `lsp-csharp.lua`. Key de
 
 `csharpier` is wired into `conform-nvim` via `conform-csharp.lua` for the `cs` filetype.
 
-## Possible Improvements
+## Debugging
 
-- **Debugging** — `netcoredbg` is installed and `nvim-dap` is commented out in `_plugins.nix`; wiring these up would add full breakpoint and step debugging support
+`dap-csharp.lua` registers the `coreclr` adapter using `netcoredbg` (already in `_dependencies.nix`) and sets up `dap.configurations.cs` with a launch config that prompts for the `.dll` path. All DAP keybinds (`<leader>d*`) are inherited from base.
+
+## Possible Improvements
 - **Test runner** — no integration with `dotnet test` for running xUnit/NUnit tests inline
 - **Roslyn LSP** — `roslyn.nvim` offers a more modern alternative to OmniSharp with better .NET 8+ support

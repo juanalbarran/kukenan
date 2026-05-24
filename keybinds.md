@@ -62,6 +62,21 @@ Leader key: `<Space>`
 |---|---|
 | `<leader>q` | Open diagnostic float |
 
+### Debugging (nvim-dap)
+
+| Key | Mode | Action |
+|---|---|---|
+| `<leader>dc` | Normal | Continue / Start |
+| `<leader>do` | Normal | Step over |
+| `<leader>di` | Normal | Step into |
+| `<leader>dx` | Normal | Step out |
+| `<leader>db` | Normal | Toggle breakpoint |
+| `<leader>dB` | Normal | Conditional breakpoint |
+| `<leader>du` | Normal | Toggle DAP UI |
+| `<leader>dr` | Normal | Open REPL |
+| `<leader>dl` | Normal | Run last |
+| `<leader>dq` | Normal | Terminate session |
+
 ### LSP (active when a language server is attached)
 
 | Key | Mode | Action |
@@ -110,18 +125,31 @@ Leader key: `<Space>`
 | Key | Mode | Action |
 |---|---|---|
 | `<leader>io` | Normal | Organize imports |
-| `<leader>jv` | Visual | Extract variable |
-| `<leader>jm` | Visual | Extract method |
+| `<leader>jv` | Visual | Extract variable (with UI prompt) |
+| `<leader>jm` | Visual | Extract method (with UI prompt) |
 | `<leader>jgs` | Normal | Generate getters/setters |
 | `<leader>jgc` | Normal | Generate constructor |
 | `<leader>jgt` | Normal | Generate toString |
 | `<leader>jgh` | Normal | Generate hashCode/equals |
+| `<leader>jtc` | Normal | Run test class |
+| `<leader>jtm` | Normal | Run nearest test method |
+| `<leader>jmt` | Normal | `mvn test` (output in console tmux window) |
+| `<leader>jmc` | Normal | `mvn clean` (output in console tmux window) |
+| `<leader>jmb` | Normal | `mvn install` (output in console tmux window) |
+| `<leader>jmp` | Normal | `mvn package` (output in console tmux window) |
 
 ---
 
 ## Rust Edition
 
-No edition-specific keybinds. Uses base LSP keybinds.
+### Cargo Tasks (output in console tmux window)
+
+| Key | Action |
+|---|---|
+| `<leader>rb` | `cargo build` |
+| `<leader>rr` | `cargo run` |
+| `<leader>rt` | `cargo test` |
+| `<leader>rc` | `cargo clean` |
 
 ## C# Edition
 

@@ -4,4 +4,5 @@ with pkgs; [
   typescript
   eslint_d
   prettier
+  vscode-js-debug
 ]

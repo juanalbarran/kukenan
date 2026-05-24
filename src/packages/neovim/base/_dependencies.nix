@@ -8,6 +8,7 @@ with pkgs; [
   # c
   clang
   clang-tools
+  codelldb
 
   # lua
   stylua

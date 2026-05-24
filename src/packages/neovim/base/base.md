@@ -13,6 +13,7 @@ The `base` edition is the foundation shared by all other editions. It provides a
 | Snippets | luasnip, friendly-snippets |
 | Icons | nvim-web-devicons, mini-icons |
 | Utils | indent-blankline-nvim, nvim-colorizer-lua, render-markdown-nvim, diffview-nvim |
+| Debugging | nvim-dap, nvim-dap-ui, nvim-dap-virtual-text, nvim-nio |
 | Completion | blink-cmp |
 | Formatting | conform-nvim |
 | Syntax | nvim-treesitter |
@@ -27,6 +28,7 @@ The `base` edition is the foundation shared by all other editions. It provides a
 |---|---|
 | ripgrep, fzf | Fuzzy finding |
 | clang, clang-tools | C/C++ compiler and tooling |
+| codelldb | C debug adapter |
 | stylua | Lua formatter |
 | lua-language-server | Lua LSP |
 | nixd | Nix LSP |

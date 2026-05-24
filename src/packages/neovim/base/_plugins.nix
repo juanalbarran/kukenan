@@ -42,6 +42,12 @@ with root.packages.vimPlugins; [
   render-markdown-nvim
   diffview-nvim
 
+  # Debugging
+  nvim-dap
+  nvim-dap-ui
+  nvim-dap-virtual-text
+  nvim-nio
+
   # Completion
   blink-cmp
 

@@ -39,8 +39,21 @@ The `rust` edition extends `base` with a full Rust development environment: comp
 
 `crates-nvim` runs with LSP integration enabled, providing completion, hover info, and code actions for crate versions directly in `Cargo.toml`.
 
+## Debugging
+
+Uses the `codelldb` adapter already configured in base. `dap-rust.lua` adds `dap.configurations.rust` with the default executable path pointing at `target/debug/`. All DAP keybinds (`<leader>d*`) are inherited from base.
+
+## Keybinds
+
+### Cargo Tasks (output in console tmux window)
+
+| Key | Action |
+|---|---|
+| `<leader>rb` | `cargo build` |
+| `<leader>rr` | `cargo run` |
+| `<leader>rt` | `cargo test` |
+| `<leader>rc` | `cargo clean` |
+
 ## Possible Improvements
 
-- **Debugging** — no DAP setup; `codelldb` or `lldb-vscode` would enable breakpoints and step debugging for Rust
-- **Test runner** — no inline test runner; cargo test output requires leaving the editor
-- **Cargo task runner** — no keybind to run `cargo build`, `cargo run`, or `cargo test` from within Neovim
+- **Inline test runner** — `cargo test` output goes to the console window; no inline pass/fail indicators in the editor

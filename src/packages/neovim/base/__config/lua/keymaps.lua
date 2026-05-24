@@ -57,6 +57,22 @@ vim.keymap.set("n", "<leader>fg", fzfLua.grep, { noremap = true, silent = true, 
 -- Search & Replace
 vim.keymap.set("n", "<leader>sr", "<cmd>GrugFar<CR>", { noremap = true, silent = true, desc = "[S]earch & [R]eplace" })
 
+-- DAP
+local dap = require("dap")
+local dapui = require("dapui")
+vim.keymap.set("n", "<leader>dc", dap.continue, { noremap = true, silent = true, desc = "[D]ebug [C]ontinue" })
+vim.keymap.set("n", "<leader>do", dap.step_over, { noremap = true, silent = true, desc = "[D]ebug Step [O]ver" })
+vim.keymap.set("n", "<leader>di", dap.step_into, { noremap = true, silent = true, desc = "[D]ebug Step [I]nto" })
+vim.keymap.set("n", "<leader>dx", dap.step_out, { noremap = true, silent = true, desc = "[D]ebug Step Out [X]" })
+vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { noremap = true, silent = true, desc = "[D]ebug Toggle [B]reakpoint" })
+vim.keymap.set("n", "<leader>dB", function()
+  dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end, { noremap = true, silent = true, desc = "[D]ebug Conditional [B]reakpoint" })
+vim.keymap.set("n", "<leader>du", dapui.toggle, { noremap = true, silent = true, desc = "[D]ebug Toggle [U]I" })
+vim.keymap.set("n", "<leader>dr", dap.repl.open, { noremap = true, silent = true, desc = "[D]ebug Open [R]EPL" })
+vim.keymap.set("n", "<leader>dl", dap.run_last, { noremap = true, silent = true, desc = "[D]ebug Run [L]ast" })
+vim.keymap.set("n", "<leader>dq", dap.terminate, { noremap = true, silent = true, desc = "[D]ebug [Q]uit" })
+
 -- Colorizer Toggle
 vim.keymap.set(
 	"n",
