@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 		vim.keymap.set(
 			"n",
-			"<leader>jo",
+			"<leader>io",
 			exec_jdtls("java.edit.organizeImports", function(_, bnr)
 				return { vim.uri_from_bufnr(bnr) }
 			end),

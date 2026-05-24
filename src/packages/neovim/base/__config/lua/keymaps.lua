@@ -25,10 +25,6 @@ vim.keymap.set(
 	{ noremap = true, silent = true, desc = "Open diagnostic [Q]uickfix." }
 )
 
--- Movement
-vim.keymap.set("n", "<C-j>", "<C-d>zz", opts)
-vim.keymap.set("n", "<C-k>", "<C-u>zz", opts)
-
 -- Split windows
 vim.keymap.set("n", "<leader>vs", "<cmd>vsplit<CR>", { noremap = true, silent = true, desc = "[V]ertical [S]plit." })
 vim.keymap.set("n", "<leader>hs", "<cmd>split<CR>", { noremap = true, silent = true, desc = "[H]orizontal [S]plit." })
@@ -57,6 +53,9 @@ vim.keymap.set(
 )
 vim.keymap.set("n", "<leader>fw", fzfLua.grep_cword, { noremap = true, silent = true, desc = "[F]ind current [W]ord." })
 vim.keymap.set("n", "<leader>fg", fzfLua.grep, { noremap = true, silent = true, desc = "[F]ind by [G]rep." })
+
+-- Search & Replace
+vim.keymap.set("n", "<leader>sr", "<cmd>GrugFar<CR>", { noremap = true, silent = true, desc = "[S]earch & [R]eplace" })
 
 -- Colorizer Toggle
 vim.keymap.set(

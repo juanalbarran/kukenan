@@ -26,12 +26,18 @@ with root.packages.vimPlugins; [
   # Editing
   nvim-autopairs
   nvim-surround
+  grug-far-nvim
+
+  # Snippets
+  luasnip
+  friendly-snippets
 
   # Icons
   nvim-web-devicons
   mini-icons
 
   # Utils
+  indent-blankline-nvim
   nvim-colorizer-lua
   render-markdown-nvim
   diffview-nvim

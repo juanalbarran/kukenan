@@ -2,8 +2,9 @@
 require("blink.cmp").setup({
 	keymap = { preset = "default" },
 	sources = {
-		default = { "lsp", "path", "buffer" },
+		default = { "lsp", "path", "buffer", "snippets" },
 	},
+	snippets = { preset = "luasnip" },
 	completion = {
 		menu = { border = "single" },
 		documentation = {
