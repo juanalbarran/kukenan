@@ -19,6 +19,8 @@ with root.packages.vimPlugins; [
   vague
   koda-nvim
   luna-nvim
+  sequoia-nvim
+  papercolor-theme
 
   # Files
   oil-nvim
