@@ -17,6 +17,8 @@ with root.packages.vimPlugins; [
   lush-nvim
   alabaster
   vague
+  koda-nvim
+  luna-nvim
 
   # Files
   oil-nvim
@@ -37,10 +39,10 @@ with root.packages.vimPlugins; [
   mini-icons
 
   # Utils
-  indent-blankline-nvim
   nvim-colorizer-lua
   render-markdown-nvim
   diffview-nvim
+  zdiff-nvim
 
   # Debugging
   nvim-dap

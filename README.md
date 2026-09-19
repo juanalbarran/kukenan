@@ -1,4 +1,4 @@
-# Neovim
+# Kukenan
 
 My nix neovim build
 It is based in Prima Materia's build.

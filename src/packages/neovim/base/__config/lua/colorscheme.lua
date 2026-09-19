@@ -13,7 +13,7 @@ local theme_file_path = vim.fn.expand("$HOME/.cache/style/mode")
 local uv = vim.uv or vim.loop -- Handles both new and old Neovim versions
 
 -- !!! CHANGE THESE TO YOUR INSTALLED THEMES !!!
-local DARK_THEME = "vague"      --"tokyonight-moon" -- Example: "catppuccin", "vague", "gruvbox"
+local DARK_THEME = "luna" --"tokyonight-moon" -- Example: "catppuccin", "vague", "gruvbox" "koda" "luna"
 local LIGHT_THEME = "alabaster" -- "onedark" -- Example: "alabaster", "dayfox", "rose-pine-dawn"
 
 -- 2. HELPER FUNCTIONS

@@ -1,26 +1,29 @@
 # src/packages/neovim/base/_dependencies.nix
 {pkgs}:
-with pkgs; [
-  bashInteractive
-  ripgrep
-  fzf
+with pkgs;
+  [
+    bashInteractive
+    ripgrep
+    fzf
 
-  # c
-  clang
-  clang-tools
+    # c
+    clang
+    clang-tools
 
-  # lua
-  stylua
-  lua-language-server
+    # lua
+    stylua
+    lua-language-server
 
-  statix
-  alejandra
-  nixd
-  qt6.qtdeclarative
-  # css, html, etc.
-  vscode-langservers-extracted
+    statix
+    alejandra
+    nixd
+    qt6.qtdeclarative
+    # css, html, etc.
+    vscode-langservers-extracted
 
-  prettier
-  viu
-  ueberzugpp
-]
+    prettier
+    viu
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    ueberzugpp
+  ]
