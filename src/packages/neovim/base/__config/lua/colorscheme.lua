@@ -7,13 +7,20 @@ require("vague").setup({
 		bg = "#131313",
 	},
 })
+
+require("kanagawa").setup({
+	theme = "dragon",
+	colors = {
+		theme = { all = { ui = { bg = "#000000", bg_gutter = "none" } } },
+	},
+})
 -- 1. CONFIGURATION
 -- Point to the file managed by toggle-theme.sh
 local theme_file_path = vim.fn.expand("$HOME/.cache/style/mode")
 local uv = vim.uv or vim.loop -- Handles both new and old Neovim versions
 
 -- !!! CHANGE THESE TO YOUR INSTALLED THEMES !!!
-local DARK_THEME = "koda-moss" --"tokyonight-moon" -- Example: "catppuccin", "vague", "gruvbox" "koda" "luna" "sequoia-moonlight-dark"
+local DARK_THEME = "no-clown-fiesta-nvim" --"tokyonight-moon" -- Example: "catppuccin", "vague", "gruvbox" "koda" "luna" "sequoia-moonlight-dark"
 local LIGHT_THEME = "alabaster" -- "onedark" -- Example: "alabaster", "dayfox", "rose-pine-dawn" "sequoia-moonlight-light"
 
 -- 2. HELPER FUNCTIONS

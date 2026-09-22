@@ -21,6 +21,8 @@ with root.packages.vimPlugins; [
   luna-nvim
   sequoia-nvim
   papercolor-theme
+  no-clown-fiesta-nvim
+  kanagawa-nvim
 
   # Files
   oil-nvim
