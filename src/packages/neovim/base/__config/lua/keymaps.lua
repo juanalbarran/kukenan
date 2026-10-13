@@ -28,8 +28,6 @@ vim.keymap.set(
 -- Split windows
 vim.keymap.set("n", "<leader>vs", "<cmd>vsplit<CR>", { noremap = true, silent = true, desc = "[V]ertical [S]plit." })
 vim.keymap.set("n", "<leader>hs", "<cmd>split<CR>", { noremap = true, silent = true, desc = "[H]orizontal [S]plit." })
-vim.keymap.set("n", "<c-l>", "<c-w><c-l>", opts)
-vim.keymap.set("n", "<c-h>", "<c-w><c-h>", opts)
 
 -- Buffer
 vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { noremap = true, silent = true, desc = "[B]uffer [D]elete." })
@@ -64,9 +62,14 @@ vim.keymap.set("n", "<leader>dc", dap.continue, { noremap = true, silent = true,
 vim.keymap.set("n", "<leader>do", dap.step_over, { noremap = true, silent = true, desc = "[D]ebug Step [O]ver" })
 vim.keymap.set("n", "<leader>di", dap.step_into, { noremap = true, silent = true, desc = "[D]ebug Step [I]nto" })
 vim.keymap.set("n", "<leader>dx", dap.step_out, { noremap = true, silent = true, desc = "[D]ebug Step Out [X]" })
-vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { noremap = true, silent = true, desc = "[D]ebug Toggle [B]reakpoint" })
+vim.keymap.set(
+	"n",
+	"<leader>db",
+	dap.toggle_breakpoint,
+	{ noremap = true, silent = true, desc = "[D]ebug Toggle [B]reakpoint" }
+)
 vim.keymap.set("n", "<leader>dB", function()
-  dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+	dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
 end, { noremap = true, silent = true, desc = "[D]ebug Conditional [B]reakpoint" })
 vim.keymap.set("n", "<leader>du", dapui.toggle, { noremap = true, silent = true, desc = "[D]ebug Toggle [U]I" })
 vim.keymap.set("n", "<leader>dr", dap.repl.open, { noremap = true, silent = true, desc = "[D]ebug Open [R]EPL" })

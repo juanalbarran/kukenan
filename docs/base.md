@@ -4,19 +4,19 @@ The `base` edition is the foundation shared by all other editions. It provides a
 
 ## Plugins
 
-| Category        | Plugin                                                                                     |
-| --------------- | ------------------------------------------------------------------------------------------ |
-| Look & Feel     | lualine-nvim, noice-nvim, nvim-notify, which-key-nvim, vim-sleuth                          |
-| Colorschemes    | zenbones-nvim, lush-nvim, alabaster, vague                                                 |
-| File Navigation | oil-nvim, fzf-lua, neo-tree-nvim                                                           |
-| Editing         | nvim-autopairs, nvim-surround, grug-far-nvim                                               |
-| Snippets        | luasnip, friendly-snippets                                                                 |
-| Icons           | nvim-web-devicons, mini-icons                                                              |
-| Utils           | indent-blankline-nvim, nvim-colorizer-lua, render-markdown-nvim, diffview-nvim, zdiff-nvim |
-| Debugging       | nvim-dap, nvim-dap-ui, nvim-dap-virtual-text, nvim-nio                                     |
-| Completion      | blink-cmp                                                                                  |
-| Formatting      | conform-nvim                                                                               |
-| Syntax          | nvim-treesitter                                                                            |
+| Category        | Plugin                                                                                                         |
+| --------------- | -------------------------------------------------------------------------------------------------------------- |
+| Look & Feel     | lualine-nvim, noice-nvim, nvim-notify, which-key-nvim, vim-sleuth                                              |
+| Colorschemes    | zenbones-nvim, lush-nvim, alabaster, vague                                                                     |
+| File Navigation | oil-nvim, fzf-lua, neo-tree-nvim                                                                               |
+| Editing         | nvim-autopairs, nvim-surround, grug-far-nvim                                                                   |
+| Snippets        | luasnip, friendly-snippets                                                                                     |
+| Icons           | nvim-web-devicons, mini-icons                                                                                  |
+| Utils           | indent-blankline-nvim, nvim-colorizer-lua, render-markdown-nvim, diffview-nvim, zdiff-nvim, vim-tmux-navigator |
+| Debugging       | nvim-dap, nvim-dap-ui, nvim-dap-virtual-text, nvim-nio                                                         |
+| Completion      | blink-cmp                                                                                                      |
+| Formatting      | conform-nvim                                                                                                   |
+| Syntax          | nvim-treesitter                                                                                                |
 
 ## Treesitter Parsers
 

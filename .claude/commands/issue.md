@@ -1,5 +1,5 @@
 ---
-description: Show a sarisarinama issue and start solving it
+description: Show a kukenan issue and start solving it
 argument-hint: <issue-number>
 allowed-tools: Bash(gh issue view:*), Bash(gh api repos/{owner}/{repo}/issues/*/parent)
 ---

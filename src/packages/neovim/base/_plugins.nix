@@ -47,6 +47,7 @@ with root.packages.vimPlugins; [
   render-markdown-nvim
   diffview-nvim
   zdiff-nvim
+  vim-tmux-navigator
 
   # Debugging
   nvim-dap

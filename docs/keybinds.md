@@ -21,14 +21,17 @@ Leader key: `<Space>`
 
 ### Buffers & Windows
 
-| Key           | Action                |
-| ------------- | --------------------- |
-| `<leader>bd`  | Delete current buffer |
-| `<leader>bda` | Delete all buffers    |
-| `<leader>vs`  | Vertical split        |
-| `<leader>hs`  | Horizontal split      |
-| `<C-l>`       | Move to right window  |
-| `<C-h>`       | Move to left window   |
+| Key           | Action                              |
+| ------------- | ----------------------------------- |
+| `<leader>bd`  | Delete current buffer               |
+| `<leader>bda` | Delete all buffers                  |
+| `<leader>vs`  | Vertical split                      |
+| `<leader>hs`  | Horizontal split                    |
+| `<C-h>`       | Move to left window / tmux pane     |
+| `<C-j>`       | Move to window below / tmux pane    |
+| `<C-k>`       | Move to window above / tmux pane    |
+| `<C-l>`       | Move to right window / tmux pane    |
+| `<C-\>`       | Move to previous window / tmux pane |
 
 ### Editing & UI
 
