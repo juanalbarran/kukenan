@@ -17,6 +17,7 @@ with root.packages.vimPlugins; [
   lush-nvim
   alabaster
   vague
+  aether
 
   # Files
   oil-nvim
