@@ -8,6 +8,13 @@ require("vague").setup({
 	},
 })
 
+require("kanagawa").setup({
+	theme = "dragon",
+	colors = {
+		theme = { all = { ui = { bg = "#000000", bg_gutter = "none" } } },
+	},
+})
+
 local uv = vim.uv or vim.loop
 
 -- 1. CONFIGURATION

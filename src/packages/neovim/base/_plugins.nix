@@ -17,6 +17,12 @@ with root.packages.vimPlugins; [
   lush-nvim
   alabaster
   vague
+  koda-nvim
+  luna-nvim
+  sequoia-nvim
+  papercolor-theme
+  no-clown-fiesta-nvim
+  kanagawa-nvim
   aether
 
   # Files
@@ -27,6 +33,11 @@ with root.packages.vimPlugins; [
   # Editing
   nvim-autopairs
   nvim-surround
+  grug-far-nvim
+
+  # Snippets
+  luasnip
+  friendly-snippets
 
   # Icons
   nvim-web-devicons
@@ -36,6 +47,14 @@ with root.packages.vimPlugins; [
   nvim-colorizer-lua
   render-markdown-nvim
   diffview-nvim
+  zdiff-nvim
+  vim-tmux-navigator
+
+  # Debugging
+  nvim-dap
+  nvim-dap-ui
+  nvim-dap-virtual-text
+  nvim-nio
 
   # Completion
   blink-cmp

@@ -64,6 +64,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- Signature
 		vim.keymap.set("n", "<leader>sh", vim.lsp.buf.signature_help, desc("[S]ignature [H]elp"))
 		vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, desc("Signature Help"))
+		-- Documentation
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Docuemntation" })
 		-- Toggle Inlay Hints
 		vim.keymap.set("n", "<leader>th", function()
 			local is_enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = 0 })
