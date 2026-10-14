@@ -7,7 +7,7 @@ The `base` edition is the foundation shared by all other editions. It provides a
 | Category        | Plugin                                                                                                         |
 | --------------- | -------------------------------------------------------------------------------------------------------------- |
 | Look & Feel     | lualine-nvim, noice-nvim, nvim-notify, which-key-nvim, vim-sleuth                                              |
-| Colorschemes    | zenbones-nvim, lush-nvim, alabaster, vague                                                                     |
+| Colorschemes    | zenbones-nvim, lush-nvim, alabaster, vague, aether                                                             |
 | File Navigation | oil-nvim, fzf-lua, neo-tree-nvim                                                                               |
 | Editing         | nvim-autopairs, nvim-surround, grug-far-nvim                                                                   |
 | Snippets        | luasnip, friendly-snippets                                                                                     |

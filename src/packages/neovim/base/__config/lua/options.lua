@@ -39,7 +39,6 @@ vim.opt.undodir = vim.fn.expand("~/.config/nvim/undodir")
 vim.opt.timeoutlen = 1000
 
 vim.opt.winborder = "rounded"
-vim.opt.background = "dark"
 -- autocommands
 
 -- whenever a http file is open then this autocommand will force treesitter to higlight it
