@@ -104,6 +104,20 @@ Leader key: `<Space>`
 | `<leader>zd` | Normal | zdiff (uncommited) |
 | `<leader>zD` | Normal | zdiff (vs main)    |
 
+### zdiff view
+
+zdiff.nvim's defaults, set on its buffer only (not overridden in `zdiff.lua`).
+
+| Key     | Mode           | Action                       |
+| ------- | -------------- | ---------------------------- |
+| `<CR>`  | Normal         | Go to the file and line      |
+| `<Tab>` | Normal         | Expand / collapse the file   |
+| `m`     | Normal         | Toggle uncommitted / vs main |
+| `R`     | Normal         | Refresh                      |
+| `gy`    | Normal, Visual | Yank a `file:line` reference |
+| `?`     | Normal         | Show zdiff's keymaps         |
+| `q`     | Normal         | Close zdiff                  |
+
 ---
 
 ## Web Edition
