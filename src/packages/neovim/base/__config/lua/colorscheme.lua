@@ -1,5 +1,6 @@
 -- src/packages/neovim/base/__config/lua/colorscheme.lua
--- Paints Neovim with the current sarisarinama theme through aether.nvim.
+-- Paints Neovim with the current sarisarinama theme through aether.nvim,
+-- or, for a theme with its own colorscheme, through that one.
 -- sarisarinama writes the resolved palette to palette.json on every
 -- `theme set` and Home Manager switch; Neovim only reads it.
 require("vague").setup({
@@ -88,6 +89,17 @@ local function clear_aether_modules()
 	end
 end
 
+-- Themes painted by their own colorscheme, not by aether: aether maps the
+-- 26 palette keys onto its own groups, so the result never looks like the
+-- original (sarisarinama#46). Only the palette's background is kept.
+local native = {
+	["no-clown-fiesta"] = function(palette)
+		-- get() hands back the plugin's own table, so this is what load() reads
+		require("no-clown-fiesta.palettes").get("dark").bg = palette.background
+		return "no-clown-fiesta"
+	end,
+}
+
 local last_content = nil
 
 -- Returns true when the palette was applied (or is already applied).
@@ -106,10 +118,15 @@ local function apply_palette()
 		return false
 	end
 
-	clear_aether_modules()
-	require("aether").setup({ colors = aether_colors(palette) })
+	local scheme = "aether"
+	if native[palette.name] then
+		scheme = native[palette.name](palette)
+	else
+		clear_aether_modules()
+		require("aether").setup({ colors = aether_colors(palette) })
+	end
 	vim.o.background = (palette.mode == "light") and "light" or "dark"
-	ok = pcall(vim.cmd.colorscheme, "aether")
+	ok = pcall(vim.cmd.colorscheme, scheme)
 	if not ok then
 		return false
 	end
