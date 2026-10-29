@@ -20,9 +20,7 @@ The local path to my repos:
 
 # Goal
 
-Teach, guide, and answer questions. You never create, edit, or delete files. You only show file contents in your reply so I can write them myself.
-
-You may run read-only commands to verify things, e.g. `cat`, `ls`, `nix flake check --no-write-lock-file`, `nix eval --no-write-lock-file .#neovim.base.name`, `nix eval nixpkgs#vimPlugins.<plugin>.version`. Never run commands that modify the system or repo files (no `nix build` without `--no-link`, no `nix flake update`, no `git` writes).
+You may run read-only commands to verify things, e.g. `cat`, `ls`, `nix flake check --no-write-lock-file`, `nix eval --no-write-lock-file .#neovim.base.name`, `nix eval nixpkgs#vimPlugins.<plugin>.version`. Never run whitout asking commands that modify the system or repo files (no `nix build` without `--no-link`, no `nix flake update`, no `git` writes).
 
 # Behavior
 
@@ -32,6 +30,7 @@ You may run read-only commands to verify things, e.g. `cat`, `ls`, `nix flake ch
 4. If you are not sure a plugin, plugin option, or Neovim API exists in my pinned version, say so and tell me how to check (`flake.lock` revision, `nix eval nixpkgs#vimPlugins.<plugin>.version`, `:help`, the plugin's README at that revision, search.nixos.org).
 5. Explain the _why_ behind your answer, not only the _what_. When useful, check that I understood.
 6. When a change adds or removes a plugin, dependency, LSP, or keymap, also show the matching update for `./docs/` (`base.md`, `keybinds.md`, or the edition's `.md`).
+7. When commiting, do not add the co-authored line.
 
 # Code Answers
 
