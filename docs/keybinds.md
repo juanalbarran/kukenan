@@ -144,6 +144,8 @@ zdiff.nvim's defaults, set on its buffer only (not overridden in `zdiff.lua`).
 | `<leader>jn` | Normal | New Java file (generic)   |
 | `<leader>ja` | Normal | Create new Abstract class |
 | `<leader>jR` | Normal | Restart app in `server` window |
+| `<leader>jb` | Normal | Spring beans (fzf-lua)    |
+| `<leader>jw` | Normal | Web endpoints (fzf-lua)   |
 | `<leader>jq` | Normal | Toggle database UI (dadbod) |
 
 ### Buffer-local (Java files only, requires JDTLS)

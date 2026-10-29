@@ -1,12 +1,13 @@
 # Java Edition
 
-The `java` edition extends `base` with a full Java development environment: JDTLS with Lombok support, Google Java Format, a project scaffolding plugin, a test runner (neotest) and a database UI (dadbod).
+The `java` edition extends `base` with a full Java development environment: JDTLS with Lombok support, Google Java Format, a project scaffolding plugin, a test runner (neotest), a database UI (dadbod) and the Spring Boot language server.
 
 ## Additional Plugins
 
 | Category | Plugin |
 |---|---|
 | Project scaffolding | java-creator-nvim |
+| Spring Boot | spring-boot-nvim |
 | Testing | neotest, neotest-java |
 | Database | vim-dadbod, vim-dadbod-ui |
 
@@ -26,6 +27,8 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 | google-java-format | Java formatter |
 | mvnd | Maven Daemon — fast compile-on-save and `<leader>jm*` tasks |
 | junit-console-path | Shell script — outputs the Nix-pinned JUnit console jar (6.0.3) for neotest-java |
+| spring-boot-path | Shell script — outputs the unpacked vscode-spring-boot 2.4.1 extension (`language-server/`, `jars/`) |
+| spring-boot-ls | Starts the Spring Boot LS on OpenJDK 21 with a 1 GB heap cap |
 | unzip, curl | Required by JDTLS for downloading sources |
 
 ## LSP
@@ -67,6 +70,8 @@ Creates new Java files from templates. Configured for Java 21 with `auto_open = 
 | `<leader>jn` | New Java file (generic) |
 | `<leader>ja` | Create new Abstract class |
 | `<leader>jR` | Restart the app in the `server` tmux window |
+| `<leader>jb` | Spring beans (fzf-lua, Spring Boot LS `@+` symbols) |
+| `<leader>jw` | Web endpoints / request mappings (fzf-lua, `@/` symbols) |
 | `<leader>jq` | Toggle the database UI (dadbod-ui) |
 
 ### Buffer-local (Java files only, requires JDTLS)
@@ -105,6 +110,18 @@ Creates new Java files from templates. Configured for Java 21 with `auto_open = 
 - **Launch** — starts the app directly via JDTLS (one config per discovered `main` class). The program inherits Neovim's environment, so when Neovim was started inside `devenv shell` it gets every devenv variable (`database_*`, …). Postgres still has to be running (`devenv up`).
 
 All DAP keybinds (`<leader>d*`) are inherited from base.
+
+## Spring Boot Language Server (spring-boot.lua)
+
+`spring-boot-nvim` runs the Spring Boot LS from VS Code's `vscode-spring-boot` extension:
+
+- **`application.yml` / `application.properties`**: completion (e.g. `spring.datasource.hikari.*`) and hover docs.
+- **Java**: bean (`@+`) and request-mapping (`@/`) symbols via workspace symbols, `<leader>jb` / `<leader>jw`.
+- Upstream also lists validation, navigation from a property to its `@ConfigurationProperties` class, Spring annotation completion and code actions (not verified here yet).
+- **Packaging**: the extension isn't in nixpkgs, so `_dependencies.nix` fetches the stable `2.4.1` `.vsix` from Open VSX (pinned hash) and unpacks the language server and the jdtls extension jars. Nothing comes from mason or `~/.vscode`.
+- **jdtls side**: its 5 extension jars are added to jdtls' `bundles` in `lsp-java.lua`. The Spring Boot LS gets the project classpath from jdtls, so property completion/hover only works once jdtls is running (open a Java file first).
+- **Memory**: one more JVM per project. Started through the `spring-boot-ls` wrapper with `-Xmx1G` and the same GC flags as jdtls; measured ~350 MB RSS on authentication-service (jdtls ~1.1 GB at the same time).
+- Starts on `java`, `application*.yml` and `application*.properties` buffers only.
 
 ## Testing (neotest.lua)
 

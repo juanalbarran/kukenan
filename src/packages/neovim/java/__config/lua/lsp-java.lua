@@ -13,6 +13,9 @@ local function get_debug_bundles()
     local test_jars = vim.split(vim.fn.system("java-test-paths"), "\n", { trimempty = true })
     debug_bundles = { debug_jar }
     vim.list_extend(debug_bundles, test_jars)
+    -- jdtls side of the Spring Boot LS (see spring-boot.lua)
+    local spring_boot_jars = vim.fn.system("spring-boot-path"):gsub("\n", "") .. "/jars"
+    vim.list_extend(debug_bundles, require("spring_boot").java_extensions(spring_boot_jars))
   end
   return debug_bundles
 end

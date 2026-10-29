@@ -7,6 +7,7 @@ with pkgs.vimPlugins;
 with root.packages.vimPlugins; [
   java-creator-nvim
   nvim-jdtls
+  spring-boot-nvim
 
   # Testing
   neotest

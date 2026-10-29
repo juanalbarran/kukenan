@@ -36,11 +36,57 @@ with pkgs; let
   junit-console-path = writeShellScriptBin "junit-console-path" ''
     echo ${junit-console-jar}
   '';
+
+  # Spring Boot language server and its jdtls extension jars, taken from the
+  # vscode-spring-boot extension (latest stable on Open VSX). Not in nixpkgs.
+  vscode-spring-boot = stdenvNoCC.mkDerivation {
+    pname = "vscode-spring-boot";
+    version = "2.4.1";
+    src = fetchurl {
+      url = "https://open-vsx.org/api/VMware/vscode-spring-boot/2.4.1/file/VMware.vscode-spring-boot-2.4.1.vsix";
+      name = "vscode-spring-boot-2.4.1.zip";
+      hash = "sha256-aXHyu8UTqUTn+QfkjsaPZISNaJYw1WFr9U7wgDNJ9u0=";
+    };
+    nativeBuildInputs = [unzip];
+    unpackPhase = "unzip -q $src 'extension/language-server/*' 'extension/jars/*'";
+    installPhase = ''
+      mkdir -p $out/share/vscode-spring-boot
+      cp -r extension/language-server extension/jars $out/share/vscode-spring-boot/
+    '';
+  };
+
+  # Outputs the extension directory (language-server/ and jars/) — consumed by
+  # spring-boot.lua and lsp-java.lua
+  spring-boot-path = writeShellScriptBin "spring-boot-path" ''
+    echo ${vscode-spring-boot}/share/vscode-spring-boot
+  '';
+
+  # Starts the Spring Boot LS on the same OpenJDK 21 jdtls runs on. The flags
+  # are the ones VS Code passes, with the heap capped at 1G and the same GC
+  # flags as jdtls, so it hands unused heap back to the OS
+  spring-boot-ls = writeShellScriptBin "spring-boot-ls" ''
+    exec ${jdk21}/bin/java \
+      -Xmx1G \
+      -XX:TieredStopAtLevel=1 \
+      -XX:+UseParallelGC \
+      -XX:GCTimeRatio=4 \
+      -XX:AdaptiveSizePolicyWeight=90 \
+      -Djdk.util.zip.disableZip64ExtraFieldValidation=true \
+      -Dsts.lsp.client=vscode \
+      -Dspring.config.location=classpath:/application.properties \
+      -Dspring.profiles.active=file-logging \
+      -Dlogging.file.name=/dev/null \
+      -Dlogging.level.root=warn \
+      -jar ${vscode-spring-boot}/share/vscode-spring-boot/language-server/spring-boot-language-server-2.4.1-SNAPSHOT-exec.jar \
+      "$@"
+  '';
 in [
   jdtls-with-lombok
   java-debug-path
   java-test-paths
   junit-console-path
+  spring-boot-path
+  spring-boot-ls
 
   google-java-format
   mvnd

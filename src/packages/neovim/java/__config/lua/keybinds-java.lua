@@ -48,6 +48,15 @@ local function restart_server()
   )
 end
 
+-- Global: Spring beans and request mappings from the Spring Boot LS, which
+-- answers workspace symbol queries starting with "@+" (beans) and "@/" (web)
+vim.keymap.set("n", "<leader>jb", function()
+  require("fzf-lua").lsp_workspace_symbols({ lsp_query = "@+" })
+end, { desc = "[J]ava Spring [B]eans", noremap = true, silent = true })
+vim.keymap.set("n", "<leader>jw", function()
+  require("fzf-lua").lsp_workspace_symbols({ lsp_query = "@/" })
+end, { desc = "[J]ava [W]eb endpoints", noremap = true, silent = true })
+
 -- Global: Spring Boot server and database
 vim.keymap.set("n", "<leader>jR", restart_server, { desc = "[J]ava [R]estart server", noremap = true, silent = true })
 vim.keymap.set(
