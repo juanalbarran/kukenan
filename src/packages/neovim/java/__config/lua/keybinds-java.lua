@@ -9,6 +9,54 @@ vim.keymap.set("n", "<leader>jr", "<cmd>JavaRecord<CR>", { desc = "[J]ava [R]eco
 vim.keymap.set("n", "<leader>jn", "<cmd>JavaNew<CR>", { desc = "[J]ava [N]ew", noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ja", "<cmd>JavaAbstract<CR>", { desc = "[J]ava [A]bstract", noremap = true, silent = true })
 
+-- tmux window in this Neovim's own session, so with two Java sessions open the
+-- commands don't land in the other session's windows
+local function tmux_window(name)
+  local args = { "tmux", "display-message", "-p" }
+  if vim.env.TMUX_PANE then
+    vim.list_extend(args, { "-t", vim.env.TMUX_PANE })
+  end
+  table.insert(args, "#S")
+  return vim.trim(vim.fn.system(args)) .. ":" .. name
+end
+
+-- Stop the app in the server window, wait until its JVM is gone, then rerun
+-- the last command there (the mvn spring-boot:run started by .tmux-init.conf)
+local function restart_server()
+  local target = tmux_window("server")
+  vim.fn.system({ "tmux", "send-keys", "-t", target, "C-c" })
+
+  local tries = 0
+  local timer = vim.uv.new_timer()
+  timer:start(
+    200,
+    200,
+    vim.schedule_wrap(function()
+      tries = tries + 1
+      local cmd = vim.trim(vim.fn.system({ "tmux", "display-message", "-p", "-t", target, "#{pane_current_command}" }))
+      if cmd ~= "java" or tries >= 50 then
+        timer:stop()
+        timer:close()
+        if cmd ~= "java" then
+          vim.fn.system({ "tmux", "send-keys", "-t", target, "Up", "Enter" })
+          vim.notify("restarting", vim.log.levels.INFO, { title = "Spring Boot" })
+        else
+          vim.notify("server didn't stop", vim.log.levels.ERROR, { title = "Spring Boot" })
+        end
+      end
+    end)
+  )
+end
+
+-- Global: Spring Boot server and database
+vim.keymap.set("n", "<leader>jR", restart_server, { desc = "[J]ava [R]estart server", noremap = true, silent = true })
+vim.keymap.set(
+  "n",
+  "<leader>jq",
+  "<cmd>DBUIToggle<CR>",
+  { desc = "[J]ava [Q]uery database", noremap = true, silent = true }
+)
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "java",
   callback = function(event)
@@ -38,21 +86,34 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.lsp.buf.code_action({ context = { only = { "source.generate.hashCodeEquals" } }, apply = true })
     end, { buffer = bufnr, silent = true, desc = "[J]ava [G]enerate [H]ashCode/Equals" })
 
-    -- Test runner
+    -- Test runner (neotest)
     vim.keymap.set("n", "<leader>jtc", function()
-      require("jdtls.dap").test_class()
+      require("neotest").run.run(vim.fn.expand("%"))
     end, { buffer = bufnr, silent = true, desc = "[J]ava [T]est [C]lass" })
 
     vim.keymap.set("n", "<leader>jtm", function()
-      require("jdtls.dap").test_nearest_method()
+      require("neotest").run.run()
     end, { buffer = bufnr, silent = true, desc = "[J]ava [T]est nearest [M]ethod" })
+
+    vim.keymap.set("n", "<leader>jtd", function()
+      require("neotest").run.run({ strategy = "dap" })
+    end, { buffer = bufnr, silent = true, desc = "[J]ava [T]est [D]ebug nearest" })
+
+    vim.keymap.set("n", "<leader>jts", function()
+      require("neotest").summary.toggle()
+    end, { buffer = bufnr, silent = true, desc = "[J]ava [T]est [S]ummary" })
+
+    vim.keymap.set("n", "<leader>jto", function()
+      require("neotest").output_panel.toggle()
+    end, { buffer = bufnr, silent = true, desc = "[J]ava [T]est [O]utput" })
 
     -- Maven tasks (run in console tmux window)
     -- The console runs a devenv shell, which doesn't have mvnd on PATH, so send
     -- the absolute path from this edition's PATH instead
     local function maven(goal)
       local mvnd = vim.fn.exepath("mvnd")
-      vim.fn.system({ "tmux", "send-keys", "-t", "console", (mvnd ~= "" and mvnd or "mvn") .. " " .. goal, "Enter" })
+      local cmd = (mvnd ~= "" and mvnd or "mvn") .. " " .. goal
+      vim.fn.system({ "tmux", "send-keys", "-t", tmux_window("console"), cmd, "Enter" })
     end
 
     vim.keymap.set("n", "<leader>jmt", function()

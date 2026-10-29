@@ -1,18 +1,20 @@
 # Java Edition
 
-The `java` edition extends `base` with a full Java development environment: JDTLS with Lombok support, Google Java Format, and a project scaffolding plugin.
+The `java` edition extends `base` with a full Java development environment: JDTLS with Lombok support, Google Java Format, a project scaffolding plugin, a test runner (neotest) and a database UI (dadbod).
 
 ## Additional Plugins
 
 | Category | Plugin |
 |---|---|
 | Project scaffolding | java-creator-nvim |
+| Testing | neotest, neotest-java |
+| Database | vim-dadbod, vim-dadbod-ui |
 
 > JDTLS is managed via `nvim-jdtls` (`jdtls.start_or_attach`) — not native `vim.lsp.start`.
 
 ## Additional Treesitter Parsers
 
-`java`, `javadoc`
+`java`, `javadoc`, `properties`, `sql` (`xml` and `yaml` come from base). `treesitter-java.lua` maps Neovim's `jproperties` filetype to the `properties` parser.
 
 ## Additional External Dependencies
 
@@ -23,6 +25,7 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 | java-test-paths | Shell script — outputs all vscode-java-test jar paths |
 | google-java-format | Java formatter |
 | mvnd | Maven Daemon — fast compile-on-save and `<leader>jm*` tasks |
+| junit-console-path | Shell script — outputs the Nix-pinned JUnit console jar (6.0.3) for neotest-java |
 | unzip, curl | Required by JDTLS for downloading sources |
 
 ## LSP
@@ -63,6 +66,8 @@ Creates new Java files from templates. Configured for Java 21 with `auto_open = 
 | `<leader>jr` | Create new Java Record |
 | `<leader>jn` | New Java file (generic) |
 | `<leader>ja` | Create new Abstract class |
+| `<leader>jR` | Restart the app in the `server` tmux window |
+| `<leader>jq` | Toggle the database UI (dadbod-ui) |
 
 ### Buffer-local (Java files only, requires JDTLS)
 
@@ -75,8 +80,11 @@ Creates new Java files from templates. Configured for Java 21 with `auto_open = 
 | `<leader>jgc` | Normal | Generate constructor |
 | `<leader>jgt` | Normal | Generate toString |
 | `<leader>jgh` | Normal | Generate hashCode/equals |
-| `<leader>jtc` | Normal | Run test class |
-| `<leader>jtm` | Normal | Run nearest test method |
+| `<leader>jtc` | Normal | Run tests in file (neotest) |
+| `<leader>jtm` | Normal | Run nearest test (neotest) |
+| `<leader>jtd` | Normal | Debug nearest test (neotest + DAP) |
+| `<leader>jts` | Normal | Toggle test summary tree |
+| `<leader>jto` | Normal | Toggle test output panel |
 | `<leader>jmt` | Normal | `mvnd test` (output in console tmux window) |
 | `<leader>jmc` | Normal | `mvnd clean` (output in console tmux window) |
 | `<leader>jmb` | Normal | `mvnd install` (output in console tmux window) |
@@ -94,9 +102,28 @@ Creates new Java files from templates. Configured for Java 21 with `auto_open = 
   ```
   mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
   ```
-- **Launch** — starts the app directly via JDTLS. Only useful for simple Java apps without devenv dependencies (no DB, no env vars).
+- **Launch** — starts the app directly via JDTLS (one config per discovered `main` class). The program inherits Neovim's environment, so when Neovim was started inside `devenv shell` it gets every devenv variable (`database_*`, …). Postgres still has to be running (`devenv up`).
 
 All DAP keybinds (`<leader>d*`) are inherited from base.
+
+## Testing (neotest.lua)
+
+`neotest` with the `neotest-java` adapter: a test tree (`<leader>jts`), pass/fail signs in the gutter, an output panel (`<leader>jto`), and debugging a test through DAP (`<leader>jtd`).
+
+- neotest-java asks jdtls for the classpath and the JDK (devenv's, via `java.configuration.runtimes`), and runs a jdtls build before each run.
+- The JUnit console jar is fetched by Nix (`_dependencies.nix`, version and sha256 as pinned by neotest-java 0.37.1), so nothing is downloaded at runtime. Update notifications are off.
+- On the very first run in a fresh workspace, wait for jdtls to finish importing the project, otherwise the build is empty and no tests are found.
+- Harmless log noise: neotest's helper subprocess can't find `nvim-treesitter` (it runs the unwrapped Nix `nvim`), so neotest falls back to parsing in the main process.
+
+## Database (dadbod.lua)
+
+`vim-dadbod` + `vim-dadbod-ui`. If Neovim was started inside `devenv shell`, the project database is registered from devenv's env vars (`database_name`, `database_username`, `database_password`, `database_host`, `database_port`) as `postgresql://user:password@host:port/name`, so `<leader>jq` lists it straight away. Needs `psql` on PATH, which devenv's `services.postgres` provides.
+
+## tmux Integration
+
+`<leader>jm*` and `<leader>jR` target windows in **this Neovim's own tmux session** (resolved from `$TMUX_PANE`), so two Java sessions don't send commands to each other.
+
+- `<leader>jR` sends `C-c` to the `server` window, waits until its JVM is gone (`pane_current_command` is no longer `java`), then reruns the last command there (`Up` + `Enter`), i.e. the `mvn spring-boot:run …` started by `.tmux-init.conf`.
 
 ## Spring Boot Devtools (devtools.lua)
 

@@ -143,6 +143,8 @@ zdiff.nvim's defaults, set on its buffer only (not overridden in `zdiff.lua`).
 | `<leader>jr` | Normal | Create new Java Record    |
 | `<leader>jn` | Normal | New Java file (generic)   |
 | `<leader>ja` | Normal | Create new Abstract class |
+| `<leader>jR` | Normal | Restart app in `server` window |
+| `<leader>jq` | Normal | Toggle database UI (dadbod) |
 
 ### Buffer-local (Java files only, requires JDTLS)
 
@@ -155,8 +157,11 @@ zdiff.nvim's defaults, set on its buffer only (not overridden in `zdiff.lua`).
 | `<leader>jgc` | Normal | Generate constructor                          |
 | `<leader>jgt` | Normal | Generate toString                             |
 | `<leader>jgh` | Normal | Generate hashCode/equals                      |
-| `<leader>jtc` | Normal | Run test class                                |
-| `<leader>jtm` | Normal | Run nearest test method                       |
+| `<leader>jtc` | Normal | Run tests in file (neotest)                   |
+| `<leader>jtm` | Normal | Run nearest test (neotest)                    |
+| `<leader>jtd` | Normal | Debug nearest test (neotest + DAP)            |
+| `<leader>jts` | Normal | Toggle test summary tree                      |
+| `<leader>jto` | Normal | Toggle test output panel                      |
 | `<leader>jmt` | Normal | `mvnd test` (output in console tmux window)    |
 | `<leader>jmc` | Normal | `mvnd clean` (output in console tmux window)   |
 | `<leader>jmb` | Normal | `mvnd install` (output in console tmux window) |

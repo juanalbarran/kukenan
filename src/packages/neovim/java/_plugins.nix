@@ -7,4 +7,12 @@ with pkgs.vimPlugins;
 with root.packages.vimPlugins; [
   java-creator-nvim
   nvim-jdtls
+
+  # Testing
+  neotest
+  neotest-java
+
+  # Database
+  vim-dadbod
+  vim-dadbod-ui
 ]

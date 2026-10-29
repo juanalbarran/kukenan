@@ -24,10 +24,23 @@ with pkgs; let
   java-test-paths = writeShellScriptBin "java-test-paths" ''
     find ${vscode-extensions.vscjava.vscode-java-test} -name "*.jar" | grep -v "sources\|javadoc"
   '';
+
+  # JUnit console launcher for neotest-java, pinned to the version and sha256
+  # neotest-java 0.37.1 expects, so it never downloads one at runtime
+  junit-console-jar = fetchurl {
+    url = "https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/6.0.3/junit-platform-console-standalone-6.0.3.jar";
+    sha256 = "3ba0d6150af79214a1411f9ea2fbef864eef68b68c89a17f672c0b89bff9d3a2";
+  };
+
+  # Outputs the JUnit console jar path — consumed by neotest.lua
+  junit-console-path = writeShellScriptBin "junit-console-path" ''
+    echo ${junit-console-jar}
+  '';
 in [
   jdtls-with-lombok
   java-debug-path
   java-test-paths
+  junit-console-path
 
   google-java-format
   mvnd
