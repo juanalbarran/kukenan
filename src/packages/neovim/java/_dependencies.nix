@@ -30,7 +30,6 @@ in [
   java-test-paths
 
   google-java-format
-  temurin-bin
   mvnd
 
   unzip

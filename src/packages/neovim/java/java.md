@@ -23,7 +23,6 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 | java-test-paths | Shell script — outputs all vscode-java-test jar paths |
 | google-java-format | Java formatter |
 | mvnd | Maven Daemon — fast compile-on-save and `<leader>jm*` tasks |
-| temurin-bin | JDK (Java 21) |
 | unzip, curl | Required by JDTLS for downloading sources |
 
 ## LSP
@@ -33,7 +32,11 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 - **Plugin**: `nvim-jdtls` — provides `start_or_attach`, `extendedClientCapabilities`, refactor UI, and test runner integration
 - **Lombok**: injected via a shell wrapper that passes `--jvm-arg=-javaagent:lombok.jar` (the nixpkgs launcher ignores `JDTLS_JVM_ARGS`)
 - **Memory**: the same wrapper adds `-Xmx2G` plus vscode-java's GC flags (`UseParallelGC`, `GCTimeRatio=4`, `AdaptiveSizePolicyWeight=90`) so jdtls stays under 2 GB and returns unused heap to the OS
-- **Workspace**: per-project, stored in `~/.cache/nvim/jdtls-workspaces/<project-name>`
+- **Workspace**: per-project, stored in `~/.cache/nvim/jdtls-workspaces/<project-name>-<hash>` (first 8 chars of the root path's sha256, so two projects with the same folder name don't share an index)
+- **Project JDK**: `java.configuration.runtimes` is built from `$JAVA_HOME` (devenv), named from its `release` file (e.g. `JavaSE-21`), so analysis uses the project's JDK, not the OpenJDK jdtls runs on. Empty when `JAVA_HOME` isn't set
+- **Metadata files**: `.project`, `.classpath`, `.settings`, `.factorypath` live in the workspace, not the repo root. jdtls reads this as a JVM property, so it's passed as `--jvm-arg=-Djava.import.generatesMetadataFilesAtProjectRoot=false` in `cmd`
+- **Code lens**: reference counts (`referencesCodeLens`) are shown via `vim.lsp.codelens.enable()` on `LspAttach`; Neovim 0.12 keeps them refreshed
+- **Debug bundles**: the `java-debug-path`/`java-test-paths` lookups run once per session, not on every Java buffer
 - **Root detection**: `.git`, `mvnw`, `gradlew`, `pom.xml`, `build.gradle`
 - **Build config**: `updateBuildConfiguration = "automatic"` — JDTLS reloads on pom/gradle changes
 - **Auto-build off**: jdtls doesn't write `target/classes`; `mvnd` does on save (see Spring Boot Devtools)
