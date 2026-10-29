@@ -18,7 +18,7 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 
 | Tool | Purpose |
 |---|---|
-| jdtls (wrapped) | Java LSP with Lombok javaagent injected |
+| jdtls (wrapped) | Java LSP with Lombok javaagent injected, heap capped at 2 GB |
 | java-debug-path | Shell script — outputs the java-debug plugin jar path |
 | java-test-paths | Shell script — outputs all vscode-java-test jar paths |
 | google-java-format | Java formatter |
@@ -30,7 +30,8 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 `jdtls` is started on `FileType java` via `jdtls.start_or_attach()` in `lsp-java.lua`. Key details:
 
 - **Plugin**: `nvim-jdtls` — provides `start_or_attach`, `extendedClientCapabilities`, refactor UI, and test runner integration
-- **Lombok**: injected automatically via a shell wrapper that sets `-javaagent:lombok.jar`
+- **Lombok**: injected via a shell wrapper that passes `--jvm-arg=-javaagent:lombok.jar` (the nixpkgs launcher ignores `JDTLS_JVM_ARGS`)
+- **Memory**: the same wrapper adds `-Xmx2G` plus vscode-java's GC flags (`UseParallelGC`, `GCTimeRatio=4`, `AdaptiveSizePolicyWeight=90`) so jdtls stays under 2 GB and returns unused heap to the OS
 - **Workspace**: per-project, stored in `~/.cache/nvim/jdtls-workspaces/<project-name>`
 - **Root detection**: `.git`, `mvnw`, `gradlew`, `pom.xml`, `build.gradle`
 - **Build config**: `updateBuildConfiguration = "automatic"` — JDTLS reloads on pom/gradle changes

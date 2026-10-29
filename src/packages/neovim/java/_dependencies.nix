@@ -1,9 +1,18 @@
 # src/packages/neovim/java/_dependencies.nix
 {pkgs}:
 with pkgs; let
+  # The nixpkgs jdtls launcher only takes JVM options as --jvm-arg flags.
+  # It starts with -Xms1G and no -Xmx; the GC flags are vscode-java's defaults,
+  # they make jdtls hand unused heap back to the OS.
   jdtls-with-lombok = writeShellScriptBin "jdtls" ''
-    export JDTLS_JVM_ARGS="-javaagent:${lombok}/share/java/lombok.jar"
-    exec ${jdt-language-server}/bin/jdtls "$@"
+    exec ${jdt-language-server}/bin/jdtls \
+      --jvm-arg=-javaagent:${lombok}/share/java/lombok.jar \
+      --jvm-arg=-Xmx2G \
+      --jvm-arg=-XX:+UseParallelGC \
+      --jvm-arg=-XX:GCTimeRatio=4 \
+      --jvm-arg=-XX:AdaptiveSizePolicyWeight=90 \
+      --jvm-arg=-Dsun.zip.disableMemoryMapping=true \
+      "$@"
   '';
 
   # Outputs the java-debug plugin jar path — consumed by lsp-java.lua to populate bundles
