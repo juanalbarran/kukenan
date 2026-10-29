@@ -22,6 +22,13 @@ The `base` edition is the foundation shared by all other editions. It provides a
 
 `bash`, `html`, `markdown`, `markdown_inline`, `regex`, `lua`, `luadoc`, `nix`, `json`, `yaml`, `xml`, `qmljs`, `qmldir`, `css`, `c`
 
+The pinned nvim-treesitter is the `main` rewrite: it only installs parsers (here they come from Nix) and ignores the old `highlight`/`indent` setup options. `treesitter.lua` starts treesitter per buffer from a `FileType` autocmd, for every edition:
+
+- **Highlighting**: `vim.treesitter.start()`; filetypes without a parser in the edition keep the regex syntax.
+- **Folds**: `foldmethod=expr` with `vim.treesitter.foldexpr()`; `foldlevelstart=99` opens files unfolded (`zc`/`za`/`zM` to fold).
+- **Indent**: nvim-treesitter's `indentexpr`, only for languages with an `indents` query; others keep Vim's indent script.
+- The `alabaster` package drops a `record_struct_declaration` pattern from its C# query: the nixpkgs C# grammar has no such node, and the error broke C# highlighting.
+
 ## External Dependencies
 
 | Tool                         | Purpose                    |
