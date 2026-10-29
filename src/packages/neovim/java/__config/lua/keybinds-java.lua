@@ -20,10 +20,13 @@ local function tmux_window(name)
   return vim.trim(vim.fn.system(args)) .. ":" .. name
 end
 
--- Stop the app in the server window, wait until its JVM is gone, then rerun
--- the last command there (the mvn spring-boot:run started by .tmux-init.conf)
+-- Stop the app in the server window, wait until it is gone, then rerun the
+-- last command there (`devenv shell server` from .tmux-init.conf). The app is
+-- gone once the window's shell has no child processes left; the pane's
+-- command name can't tell, it shows the script's interpreter (sh/bash).
 local function restart_server()
   local target = tmux_window("server")
+  local pane_pid = tonumber(vim.trim(vim.fn.system({ "tmux", "display-message", "-p", "-t", target, "#{pane_pid}" })))
   vim.fn.system({ "tmux", "send-keys", "-t", target, "C-c" })
 
   local tries = 0
@@ -33,11 +36,11 @@ local function restart_server()
     200,
     vim.schedule_wrap(function()
       tries = tries + 1
-      local cmd = vim.trim(vim.fn.system({ "tmux", "display-message", "-p", "-t", target, "#{pane_current_command}" }))
-      if cmd ~= "java" or tries >= 50 then
+      local stopped = not pane_pid or #vim.api.nvim_get_proc_children(pane_pid) == 0
+      if stopped or tries >= 50 then
         timer:stop()
         timer:close()
-        if cmd ~= "java" then
+        if stopped then
           vim.fn.system({ "tmux", "send-keys", "-t", target, "Up", "Enter" })
           vim.notify("restarting", vim.log.levels.INFO, { title = "Spring Boot" })
         else

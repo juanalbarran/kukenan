@@ -103,9 +103,9 @@ Creates new Java files from templates. Configured for Java 21 with `auto_open = 
 
 **Two DAP configurations are available:**
 
-- **Attach (port 5005)** — recommended for Spring Boot + devenv. Start the app in the server tmux window with the debug agent, then attach from Neovim:
+- **Attach (port `$debug_port`)** — recommended for Spring Boot + devenv. The port is read from the `debug_port` env var that the project's `devenv.nix` sets (5005 when unset), so each project can use its own. The server tmux window runs the devenv `server` script, which starts the app with the debug agent on that port:
   ```
-  mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+  mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xmx512m -XX:TieredStopAtLevel=1 -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=$debug_port"
   ```
 - **Launch** — starts the app directly via JDTLS (one config per discovered `main` class). The program inherits Neovim's environment, so when Neovim was started inside `devenv shell` it gets every devenv variable (`database_*`, …). Postgres still has to be running (`devenv up`).
 
@@ -140,7 +140,15 @@ All DAP keybinds (`<leader>d*`) are inherited from base.
 
 `<leader>jm*` and `<leader>jR` target windows in **this Neovim's own tmux session** (resolved from `$TMUX_PANE`), so two Java sessions don't send commands to each other.
 
-- `<leader>jR` sends `C-c` to the `server` window, waits until its JVM is gone (`pane_current_command` is no longer `java`), then reruns the last command there (`Up` + `Enter`), i.e. the `mvn spring-boot:run …` started by `.tmux-init.conf`.
+- `<leader>jR` sends `C-c` to the `server` window, waits until the app is gone (the window's shell has no child processes left), then reruns the last command there (`Up` + `Enter`), i.e. the `devenv shell server` started by `.tmux-init.conf` (the project's devenv script that runs `mvn spring-boot:run …`).
+
+### What the projects provide
+
+The Java projects (template: `project-config-files/java/springboot`) are set up to match this edition:
+
+- `devenv.yaml` pins nixpkgs to kukenan's rev and `devenv.nix` uses `pkgs.jdk21` with `maven.enable` and `lsp.enable = false`, so the project's JDK and Maven run on the same OpenJDK store path as jdtls and the Spring Boot LS (one JDK on disk). Bump the pin together with kukenan's `flake.lock`, then run `devenv update` in each project.
+- Each project has its own `database_port`, `SERVER_PORT` and `debug_port` (authentication-service 5432/8080/5005, fitness-server 5433/8081/5006), so two can run at once; `dap-java.lua` and `dadbod.lua` read them from the env.
+- `.tmux-init.conf` windows: editor (`devenv shell nvim-java`), console, server (`devenv shell server`), database (`devenv shell db`), services (`devenv up`). The `server` and `db` scripts wait for Postgres with `pg_isready` instead of sleeping.
 
 ## Spring Boot Devtools (devtools.lua)
 
