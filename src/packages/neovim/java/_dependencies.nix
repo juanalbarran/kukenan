@@ -63,7 +63,10 @@ with pkgs; let
 
   # Starts the Spring Boot LS on the same OpenJDK 21 jdtls runs on. The flags
   # are the ones VS Code passes, with the heap capped at 1G and the same GC
-  # flags as jdtls, so it hands unused heap back to the OS
+  # flags as jdtls, so it hands unused heap back to the OS.
+  # -Dserver.port=0 keeps its embedded MCP server on a random port: the
+  # projects' devenv exports SERVER_PORT for the app, and Spring would bind the
+  # language server to it as well
   spring-boot-ls = writeShellScriptBin "spring-boot-ls" ''
     exec ${jdk21}/bin/java \
       -Xmx1G \
@@ -77,6 +80,7 @@ with pkgs; let
       -Dspring.profiles.active=file-logging \
       -Dlogging.file.name=/dev/null \
       -Dlogging.level.root=warn \
+      -Dserver.port=0 \
       -jar ${vscode-spring-boot}/share/vscode-spring-boot/language-server/spring-boot-language-server-2.4.1-SNAPSHOT-exec.jar \
       "$@"
   '';

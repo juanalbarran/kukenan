@@ -121,6 +121,8 @@ All DAP keybinds (`<leader>d*`) are inherited from base.
 - **Packaging**: the extension isn't in nixpkgs, so `_dependencies.nix` fetches the stable `2.4.1` `.vsix` from Open VSX (pinned hash) and unpacks the language server and the jdtls extension jars. Nothing comes from mason or `~/.vscode`.
 - **jdtls side**: its 5 extension jars are added to jdtls' `bundles` in `lsp-java.lua`. The Spring Boot LS gets the project classpath from jdtls, so property completion/hover only works once jdtls is running (open a Java file first).
 - **Memory**: one more JVM per project. Started through the `spring-boot-ls` wrapper with `-Xmx1G` and the same GC flags as jdtls; measured ~350 MB RSS on authentication-service (jdtls ~1.1 GB at the same time).
+- **Port**: the LS embeds an MCP server (`server.port=0` in its jar, i.e. a random port). The projects' devenv exports `SERVER_PORT` for the app, which Spring would apply to the LS too and bind it to the app's port (8080), so the wrapper passes `-Dserver.port=0`, which wins over the env var.
+- **GC**: spring-boot.nvim's default command uses ZGC; measured 687 MB RSS against ~350-380 MB with the wrapper's ParallelGC flags (#29).
 - Starts on `java`, `application*.yml` and `application*.properties` buffers only.
 
 ## Testing (neotest.lua)
