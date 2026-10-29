@@ -48,20 +48,27 @@ vim.api.nvim_create_autocmd("FileType", {
     end, { buffer = bufnr, silent = true, desc = "[J]ava [T]est nearest [M]ethod" })
 
     -- Maven tasks (run in console tmux window)
+    -- The console runs a devenv shell, which doesn't have mvnd on PATH, so send
+    -- the absolute path from this edition's PATH instead
+    local function maven(goal)
+      local mvnd = vim.fn.exepath("mvnd")
+      vim.fn.system({ "tmux", "send-keys", "-t", "console", (mvnd ~= "" and mvnd or "mvn") .. " " .. goal, "Enter" })
+    end
+
     vim.keymap.set("n", "<leader>jmt", function()
-      vim.fn.system("tmux send-keys -t console 'mvn test' Enter")
+      maven("test")
     end, { buffer = bufnr, silent = true, desc = "[J]ava [M]aven [T]est" })
 
     vim.keymap.set("n", "<leader>jmc", function()
-      vim.fn.system("tmux send-keys -t console 'mvn clean' Enter")
+      maven("clean")
     end, { buffer = bufnr, silent = true, desc = "[J]ava [M]aven [C]lean" })
 
     vim.keymap.set("n", "<leader>jmb", function()
-      vim.fn.system("tmux send-keys -t console 'mvn install' Enter")
+      maven("install")
     end, { buffer = bufnr, silent = true, desc = "[J]ava [M]aven [B]uild" })
 
     vim.keymap.set("n", "<leader>jmp", function()
-      vim.fn.system("tmux send-keys -t console 'mvn package' Enter")
+      maven("package")
     end, { buffer = bufnr, silent = true, desc = "[J]ava [M]aven [P]ackage" })
   end,
 })

@@ -25,6 +25,12 @@ vim.api.nvim_create_autocmd("FileType", {
       capabilities = capabilities,
       settings = {
         java = {
+          -- devtools.lua compiles with mvnd on save. jdtls would also write
+          -- target/classes, including stubs for code with errors, which makes
+          -- Spring devtools restart into code that throws at runtime
+          autobuild = {
+            enabled = false,
+          },
           configuration = {
             updateBuildConfiguration = "automatic",
           },

@@ -22,6 +22,7 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 | java-debug-path | Shell script — outputs the java-debug plugin jar path |
 | java-test-paths | Shell script — outputs all vscode-java-test jar paths |
 | google-java-format | Java formatter |
+| mvnd | Maven Daemon — fast compile-on-save and `<leader>jm*` tasks |
 | temurin-bin | JDK (Java 21) |
 | unzip, curl | Required by JDTLS for downloading sources |
 
@@ -35,6 +36,7 @@ The `java` edition extends `base` with a full Java development environment: JDTL
 - **Workspace**: per-project, stored in `~/.cache/nvim/jdtls-workspaces/<project-name>`
 - **Root detection**: `.git`, `mvnw`, `gradlew`, `pom.xml`, `build.gradle`
 - **Build config**: `updateBuildConfiguration = "automatic"` — JDTLS reloads on pom/gradle changes
+- **Auto-build off**: jdtls doesn't write `target/classes`; `mvnd` does on save (see Spring Boot Devtools)
 - Sources downloaded automatically for both Maven and Eclipse
 - `extendedClientCapabilities` passed via `init_options` — enables nvim-jdtls-specific features
 
@@ -72,10 +74,10 @@ Creates new Java files from templates. Configured for Java 21 with `auto_open = 
 | `<leader>jgh` | Normal | Generate hashCode/equals |
 | `<leader>jtc` | Normal | Run test class |
 | `<leader>jtm` | Normal | Run nearest test method |
-| `<leader>jmt` | Normal | `mvn test` (output in console tmux window) |
-| `<leader>jmc` | Normal | `mvn clean` (output in console tmux window) |
-| `<leader>jmb` | Normal | `mvn install` (output in console tmux window) |
-| `<leader>jmp` | Normal | `mvn package` (output in console tmux window) |
+| `<leader>jmt` | Normal | `mvnd test` (output in console tmux window) |
+| `<leader>jmc` | Normal | `mvnd clean` (output in console tmux window) |
+| `<leader>jmb` | Normal | `mvnd install` (output in console tmux window) |
+| `<leader>jmp` | Normal | `mvnd package` (output in console tmux window) |
 
 ## Debugging
 
@@ -95,9 +97,13 @@ All DAP keybinds (`<leader>d*`) are inherited from base.
 
 ## Spring Boot Devtools (devtools.lua)
 
-On every `BufWritePost` for `*.java` files, `mvn compile -q` runs in the background from the project root. When compilation succeeds, Spring Boot devtools detects the new `.class` files and restarts the app (~200-500ms). Notifications appear via noice/nvim-notify.
+On every `BufWritePost` for `*.java` files in a Maven project (`pom.xml` root), `mvnd test-compile -q` runs in the background. When compilation succeeds, Spring Boot devtools detects the new `.class` files and restarts the app (~200-500ms). Notifications appear via noice/nvim-notify.
 
-> Only works when Neovim is launched from inside `devenv shell` — `mvn` must be on PATH. Both `fitness-server` and `authentication-service` satisfy this via `.tmux-init.conf`.
+- **Why mvnd**: the Maven Daemon keeps one warm JVM (~300 MB, shared by all projects, stops itself after 3h idle), so a save compiles in ~1s instead of ~3-5s plus a new ~365 MB JVM per save with plain `mvn`.
+- **jdtls auto-build is off** (`java.autobuild.enabled = false` in `lsp-java.lua`): jdtls writes classes even for code with errors (as `Unresolved compilation problem` stubs), so devtools would restart into code that throws at runtime. `mvnd` writes nothing when compilation fails. Diagnostics for open buffers still work.
+- **Why `test-compile`**: with auto-build off, nothing else updates `target/test-classes`, and `<leader>jtc`/`<leader>jtm` run whatever is compiled there.
+- `mvnd` ships with this edition; it uses `JAVA_HOME` from devenv. If `mvnd` is missing or there's no `pom.xml`, the save is silently skipped.
+- The `<leader>jm*` keymaps send `mvnd`'s absolute path to the console window, because the devenv shell there doesn't have it on PATH.
 
 ## Possible Improvements
 

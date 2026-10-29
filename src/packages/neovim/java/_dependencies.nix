@@ -31,6 +31,7 @@ in [
 
   google-java-format
   temurin-bin
+  mvnd
 
   unzip
   curl

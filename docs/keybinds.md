@@ -157,10 +157,10 @@ zdiff.nvim's defaults, set on its buffer only (not overridden in `zdiff.lua`).
 | `<leader>jgh` | Normal | Generate hashCode/equals                      |
 | `<leader>jtc` | Normal | Run test class                                |
 | `<leader>jtm` | Normal | Run nearest test method                       |
-| `<leader>jmt` | Normal | `mvn test` (output in console tmux window)    |
-| `<leader>jmc` | Normal | `mvn clean` (output in console tmux window)   |
-| `<leader>jmb` | Normal | `mvn install` (output in console tmux window) |
-| `<leader>jmp` | Normal | `mvn package` (output in console tmux window) |
+| `<leader>jmt` | Normal | `mvnd test` (output in console tmux window)    |
+| `<leader>jmc` | Normal | `mvnd clean` (output in console tmux window)   |
+| `<leader>jmb` | Normal | `mvnd install` (output in console tmux window) |
+| `<leader>jmp` | Normal | `mvnd package` (output in console tmux window) |
 
 ---
 
