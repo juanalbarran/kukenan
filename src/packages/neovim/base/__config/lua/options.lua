@@ -24,6 +24,8 @@ vim.opt.smarttab = true
 vim.opt.autoindent = true
 vim.opt.breakindent = true
 
+vim.opt.iskeyword:append("-")
+
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
